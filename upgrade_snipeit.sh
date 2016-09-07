@@ -1,25 +1,35 @@
-#!/bin/bash -v
-pwd
+#!/usr/bin/env bash -v
+#
+# THIS SCRIPT PULLS THE LATEST VERSION OF SNIPE-IT FROM MASTER, CREATES A BACKUP OF THE CURRENT SNIPE-IT DIRECTORY, AND INSTALLS
+#
+# SET VARIABLES BEFORE FIRST RUN
+
+WEBSERVICENAME="apache2"
+WEBSERVERDIRECTORY="/var/www/"
+SNIPEITDIRECTORY="snipeit"
+COMPOSERPATH="/usr/local/bin/composer"
+
+# START SCRIPT
 if [ -a master.zip ]
   then
     rm master.zip
 fi
 wget -c https://github.com/snipe/snipe-it/archive/master.zip
 unzip master.zip
-service apache2 stop
-mv /var/www/snipeit/ "/var/www/snipeit_old_$(date +%F_%R)/"
-BACKUPDIR=$(ls -td /var/www/snipeit_old*/ | head -1)
-mv snipe-it-master/ /var/www/snipeit
-cp $BACKUPDIR/.env /var/www/snipeit/
-rsync -r $BACKUPDIR/vendor/ /var/www/snipeit/vendor/
-chown -R www-data:www-data /var/www/snipeit
-cd /var/www/snipeit/
-sudo -u www-data php /usr/local/bin/composer install --no-dev --prefer-source
-sudo -u www-data php /usr/local/bin/composer dump-autoload
+service $WEBSERVER stop
+mv $WEBSERVERDIRECTORY/$SNIPEITDIRECTORY/ "$WEBSERVERDIRECTORY/snipeit_old_$(date +%F_%R)/"
+BACKUPDIR=$(ls -td $WEBSERVERDIRECTORY/snipeit_old*/ | head -1)
+mv snipe-it-master/ $WEBSERVERDIRECTORY/$SNIPEITDIRECTORY
+cp $BACKUPDIR/.env $WEBSERVERDIRECTORY/$SNIPEITDIRECTORY/
+rsync -r $BACKUPDIR/vendor/ $WEBSERVERDIRECTORY/$SNIPEITDIRECTORY/vendor/
+chown -R www-data:www-data $WEBSERVERDIRECTORY/$SNIPEITDIRECTORY
+cd $WEBSERVERDIRECTORY/$SNIPEITDIRECTORY/
+sudo -u www-data php $COMPOSERPATH install --no-dev --prefer-source
+sudo -u www-data php $COMPOSERPATH dump-autoload
 php artisan migrate --force -n
 php artisan config:clear
-cd /var/www/
-rsync -r $BACKUPDIR/storage/app/backups/ snipeit/storage/app/backups/
-rsync -r $BACKUPDIR/storage/private_uploads/ snipeit/storage/private_uploads/
-rsync -r $BACKUPDIR/public/uploads/ snipeit/public/uploads/
-service apache2 start
+cd $WEBSERVERDIRECTORY
+rsync -r $BACKUPDIR/storage/app/backups/ $SNIPEITDIRECTORY/storage/app/backups/
+rsync -r $BACKUPDIR/storage/private_uploads/ $SNIPEITDIRECTORY/storage/private_uploads/
+rsync -r $BACKUPDIR/public/uploads/ $SNIPEITDIRECTORY/public/uploads/
+service $WEBSERVICENAME start
