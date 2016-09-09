@@ -1,4 +1,4 @@
-#!/usr/bin/env bash -v
+#!/bin/bash -v
 #
 # THIS SCRIPT ONLY WORKS FOR SNIPE-IT v3.0 AND BEYOND
 #
@@ -7,6 +7,7 @@
 # REMEMBER TO SET VARIABLES BEFORE FIRST RUN
 
 WEBSERVICENAME="apache2"
+WEBSERVERUSER="www-data"
 WEBSERVERDIRECTORY="/var/www/"
 SNIPEITDIRECTORY="snipeit"
 COMPOSERPATH="/usr/local/bin/composer"
@@ -24,10 +25,10 @@ BACKUPDIR=$(ls -td $WEBSERVERDIRECTORY/snipeit_old*/ | head -1)
 mv snipe-it-master/ $WEBSERVERDIRECTORY/$SNIPEITDIRECTORY
 cp $BACKUPDIR/.env $WEBSERVERDIRECTORY/$SNIPEITDIRECTORY/
 rsync -r $BACKUPDIR/vendor/ $WEBSERVERDIRECTORY/$SNIPEITDIRECTORY/vendor/
-chown -R www-data:www-data $WEBSERVERDIRECTORY/$SNIPEITDIRECTORY
+chown -R $WEBSERVERUSER:$WEBSERVERUSER $WEBSERVERDIRECTORY/$SNIPEITDIRECTORY
 cd $WEBSERVERDIRECTORY/$SNIPEITDIRECTORY/
-sudo -u www-data php $COMPOSERPATH install --no-dev --prefer-source
-sudo -u www-data php $COMPOSERPATH dump-autoload
+sudo -u $WEBSERVERUSER php $COMPOSERPATH install --no-dev --prefer-source
+sudo -u $WEBSERVERUSER php $COMPOSERPATH dump-autoload
 php artisan migrate --force -n
 php artisan config:clear
 cd $WEBSERVERDIRECTORY
