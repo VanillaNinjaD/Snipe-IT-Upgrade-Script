@@ -1,22 +1,26 @@
-#!/bin/bash -v
+#!/bin/bash
 #
-# THIS SCRIPT ONLY WORKS FOR SNIPE-IT v3.0 AND BEYOND
+# DEFINE VARIABLES HERE
 #
-# THIS PULLS THE LATEST VERSION OF SNIPE-IT FROM MASTER, CREATES A BACKUP OF THE CURRENT SNIPE-IT DIRECTORY, AND INSTALLS
-#
-# REMEMBER TO SET VARIABLES BEFORE FIRST RUN
-
 WEBSERVICENAME="apache2"
 WEBSERVERUSER="www-data"
 WEBSERVERDIRECTORY="/var/www/"
 SNIPEITDIRECTORY="snipeit"
 COMPOSERPATH="/usr/local/bin/composer"
-
-# START SCRIPT
+#
+# PERFORM CHECKS
+#
+if [[ $EUID -ne 0 ]]; then
+   echo "THIS SCRIPT MUST BE RUN AS ROOT!!!" 1>&2
+   exit 1
+fi
 if [ -a master.zip ]
   then
     rm master.zip
 fi
+#
+# START SCRIPT
+#
 wget -c https://github.com/snipe/snipe-it/archive/master.zip
 unzip master.zip
 service $WEBSERVICENAME stop
