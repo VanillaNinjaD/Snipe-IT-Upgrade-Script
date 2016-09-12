@@ -1,15 +1,17 @@
 #!/bin/bash
-#
+
+#-----------------------
 # DEFINE VARIABLES HERE
-#
+#-----------------------
 WEBSERVICENAME="apache2"
 WEBSERVERUSER="www-data"
 WEBSERVERDIRECTORY="/var/www/"
 SNIPEITDIRECTORY="snipeit"
 COMPOSERPATH="/usr/local/bin/composer"
-#
+
+#----------------
 # PERFORM CHECKS
-#
+#----------------
 if [[ $EUID -ne 0 ]]; then
    echo "THIS SCRIPT MUST BE RUN AS ROOT!!!" 1>&2
    exit 1
@@ -18,9 +20,10 @@ if [ -a master.zip ]
   then
     rm master.zip
 fi
-#
+
+#--------------
 # START SCRIPT
-#
+#--------------
 wget -c https://github.com/snipe/snipe-it/archive/master.zip
 unzip master.zip
 service $WEBSERVICENAME stop
