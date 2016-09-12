@@ -31,6 +31,7 @@ sudo -u $WEBSERVERUSER php $COMPOSERPATH install --no-dev --prefer-source
 sudo -u $WEBSERVERUSER php $COMPOSERPATH dump-autoload
 php artisan migrate --force -n
 php artisan config:clear
+php artisan config:cache
 cd $WEBSERVERDIRECTORY
 rsync -r $BACKUPDIR/storage/app/backups/ $SNIPEITDIRECTORY/storage/app/backups/
 rsync -r $BACKUPDIR/storage/private_uploads/ $SNIPEITDIRECTORY/storage/private_uploads/
