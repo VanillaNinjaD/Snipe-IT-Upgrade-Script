@@ -19,7 +19,7 @@ if [ -a master.zip ]
 fi
 wget -c https://github.com/snipe/snipe-it/archive/master.zip
 unzip master.zip
-service $WEBSERVER stop
+service $WEBSERVICENAME stop
 mv $WEBSERVERDIRECTORY/$SNIPEITDIRECTORY/ "$WEBSERVERDIRECTORY/snipeit_old_$(date +%F_%R)/"
 BACKUPDIR=$(ls -td $WEBSERVERDIRECTORY/snipeit_old*/ | head -1)
 mv snipe-it-master/ $WEBSERVERDIRECTORY/$SNIPEITDIRECTORY
