@@ -8,6 +8,10 @@ WEBSERVERUSER="www-data"
 WEBSERVERDIRECTORY="/var/www/"
 SNIPEITDIRECTORY="snipeit"
 COMPOSERPATH="/usr/local/bin/composer"
+MYSQLDUMPPATH="/usr/bin/mysqldump"
+DBNAME="snipeit"
+DBUSER="**USERNAME**"
+DBPASS="**PASSWORD**"
 
 #----------------
 # PERFORM CHECKS
@@ -27,6 +31,7 @@ fi
 wget -c https://github.com/snipe/snipe-it/archive/master.zip
 unzip master.zip
 service $WEBSERVICENAME stop
+$MYSQLDUMPPATH -u $DBUSER -p$DBPASS $DBNAME > "$WEBSERVERDIRECTORY/$SNIPEITDIRECTORY/$DBNAME.$(date +%F_%R).bak"
 mv $WEBSERVERDIRECTORY/$SNIPEITDIRECTORY/ "$WEBSERVERDIRECTORY/$SNIPEITDIRECTORY.$(date +%F_%R)/"
 BACKUPDIR=$(ls -td $WEBSERVERDIRECTORY/$SNIPEITDIRECTORY*/ | head -1)
 mv snipe-it-master/ $WEBSERVERDIRECTORY/$SNIPEITDIRECTORY
