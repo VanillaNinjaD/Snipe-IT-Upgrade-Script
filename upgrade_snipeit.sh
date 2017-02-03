@@ -5,7 +5,7 @@
 #-----------------------
 WEBSERVICENAME="apache2"
 WEBSERVERUSER="www-data"
-WEBSERVERDIRECTORY="/var/www/"
+WEBSERVERDIRECTORY="/var/www"
 SNIPEITDIRECTORY="snipeit"
 COMPOSERPATH="/usr/local/bin/composer"
 MYSQLDUMPPATH="/usr/bin/mysqldump"
